@@ -1,10 +1,8 @@
 package com.tvnsoftware.flicks.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
+import android.os.Parcelable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,6 +47,15 @@ public class MainActivity extends BaseActivity {
                 startActivity(i);
             }
         });
+
+        if (savedInstanceState != null) {
+            mMovies = (ArrayList<Movie>) savedInstanceState.getSerializable("data");
+            mMoviesAdapter.clear();
+            mMoviesAdapter.addAll(mMovies);
+        } else {
+            getMovie();
+        }
+
         mLvMovies.setAdapter(mMoviesAdapter);
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -62,7 +69,13 @@ public class MainActivity extends BaseActivity {
                 R.color.colorPrimaryDark,
                 R.color.colorAccent,
                 R.color.colorPrimaryLight);
-        getMovie();
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("data", mMovies);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

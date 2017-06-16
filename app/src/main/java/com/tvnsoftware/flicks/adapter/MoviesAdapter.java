@@ -1,6 +1,7 @@
 package com.tvnsoftware.flicks.adapter;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -72,15 +73,23 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        int orientation = getContext().getResources().getConfiguration().orientation;
+
         if (movie.getVoteAverage() >= 5) {
             Glide.with(getContext()).load(movie.getBackdropPath())
+                    .placeholder(R.drawable.badge_none)
                     .bitmapTransform(new RoundedCornersTransformation(getContext(), 8, 0))
                     .into(viewHolder.ivMovie);
             viewHolder.ivIconOver.setVisibility(View.VISIBLE);
-            viewHolder.layoutRight.setVisibility(View.GONE);
+            if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                viewHolder.layoutRight.setVisibility(View.GONE);
+            } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                viewHolder.layoutRight.setVisibility(View.VISIBLE);
+            }
         } else {
             viewHolder.ivIconOver.setVisibility(View.GONE);
             Glide.with(getContext()).load(movie.getPosterPath())
+                    .placeholder(R.drawable.badge_none)
                     .bitmapTransform(new RoundedCornersTransformation(getContext(), 8, 0))
                     .into(viewHolder.ivMovie);
             viewHolder.layoutRight.setVisibility(View.VISIBLE);
