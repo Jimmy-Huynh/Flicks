@@ -22,11 +22,16 @@ import com.tvnsoftware.flicks.utils.Contant;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends BaseActivity {
-    private ListView mLvMovies;
+    @BindView(R.id.movie_list)
+    ListView mLvMovies;
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout swipeContainer;
     private final String TAG = "MainActivity";
     private ArrayList<Movie> mMovies;
-    private SwipeRefreshLayout swipeContainer;
     private MoviesAdapter mMoviesAdapter;
 
     @Override
@@ -34,8 +39,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         RetrofitManager.getInstance().config(getApplicationContext());
-
-        mLvMovies = (ListView) findViewById(R.id.movie_list);
+        ButterKnife.bind(this);
 
         mMoviesAdapter = new MoviesAdapter(MainActivity.this, new MoviesAdapter.MoviesListener() {
             @Override
@@ -47,7 +51,6 @@ public class MainActivity extends BaseActivity {
         });
         mLvMovies.setAdapter(mMoviesAdapter);
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

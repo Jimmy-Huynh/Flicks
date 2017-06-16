@@ -19,12 +19,17 @@ import com.tvnsoftware.flicks.api.restmanager.CommonInterface;
 import com.tvnsoftware.flicks.api.restservice.TrailerService;
 import com.tvnsoftware.flicks.utils.Contant;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailMovieActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+    @BindView(R.id.tv_title) TextView mTvTitle;
+    @BindView(R.id.tv_release_date) TextView mTvReleaseDate;
+    @BindView(R.id.tv_content_summary) TextView mTvContent;
+    @BindView(R.id.iv_star) ImageView mIvStar;
+    @BindView(R.id.player) YouTubePlayerView youTubePlayerView;
 
     private Movie mMovie;
-    private TextView mTvTitle, mTvReleaseDate, mTvContent;
-    private ImageView mIvStar;
-    private YouTubePlayerView youTubePlayerView;
     private Trailer mTrailer;
 
     @Override
@@ -32,12 +37,7 @@ public class DetailMovieActivity extends YouTubeBaseActivity implements YouTubeP
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_movie);
         mMovie = (Movie) getIntent().getSerializableExtra(Contant.MOVIE_OBJECT);
-
-        mTvTitle = (TextView) findViewById(R.id.tv_title);
-        mTvReleaseDate = (TextView) findViewById(R.id.tv_release_date);
-        mTvContent = (TextView) findViewById(R.id.tv_content_summary);
-        mIvStar = (ImageView) findViewById(R.id.iv_star);
-        youTubePlayerView = (YouTubePlayerView) findViewById(R.id.player);
+        ButterKnife.bind(this);
 
         if (null != mMovie) {
             mTvTitle.setText(mMovie.getTitle());

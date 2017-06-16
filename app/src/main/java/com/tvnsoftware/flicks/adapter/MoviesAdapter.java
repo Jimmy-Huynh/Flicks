@@ -18,6 +18,12 @@ import com.tvnsoftware.flicks.api.model.Movie;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 /**
  * Created by TamHH on 6/15/2017.
  */
@@ -35,10 +41,23 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         mListener = listener;
     }
 
-    private static class ViewHolder {
+    static class ViewHolder {
+        @BindView(R.id.iv_movie)
         ImageView ivMovie;
-        TextView tvTitle, tvContent;
-        LinearLayout layoutItemView, layoutRight;
+        @BindView(R.id.iv_icon_over)
+        ImageView ivIconOver;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.tv_content)
+        TextView tvContent;
+        @BindView(R.id.layout_item_movie)
+        LinearLayout layoutItemView;
+        @BindView(R.id.layout_description)
+        LinearLayout layoutRight;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     @Override
@@ -46,28 +65,35 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         final Movie movie = getItem(position);
         ViewHolder viewHolder;
         if (null == convertView) {
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
-            viewHolder.ivMovie = (ImageView) convertView.findViewById(R.id.iv_movie);
-            viewHolder.tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-            viewHolder.tvContent = (TextView) convertView.findViewById(R.id.tv_content);
-            viewHolder.layoutItemView = (LinearLayout) convertView.findViewById(R.id.layout_item_movie);
-            viewHolder.layoutRight = (LinearLayout) convertView.findViewById(R.id.layout_description);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (movie.getVoteAverage() >= 5) {
-            Glide.with(getContext()).load(movie.getBackdropPath()).into(viewHolder.ivMovie);
+            Glide.with(getContext()).load(movie.getBackdropPath())
+                    .bitmapTransform(new RoundedCornersTransformation(getContext(), 8, 0))
+                    .into(viewHolder.ivMovie);
+            viewHolder.ivIconOver.setVisibility(View.VISIBLE);
             viewHolder.layoutRight.setVisibility(View.GONE);
         } else {
-            Glide.with(getContext()).load(movie.getPosterPath()).into(viewHolder.ivMovie);
+            viewHolder.ivIconOver.setVisibility(View.GONE);
+            Glide.with(getContext()).load(movie.getPosterPath())
+                    .bitmapTransform(new RoundedCornersTransformation(getContext(), 8, 0))
+                    .into(viewHolder.ivMovie);
             viewHolder.layoutRight.setVisibility(View.VISIBLE);
         }
         viewHolder.tvTitle.setText(movie.getTitle());
         viewHolder.tvContent.setText(movie.getOverview());
         viewHolder.layoutItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onItemClick(movie);
+            }
+        });
+        viewHolder.ivIconOver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onItemClick(movie);
