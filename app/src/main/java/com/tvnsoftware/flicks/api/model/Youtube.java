@@ -1,0 +1,47 @@
+package com.tvnsoftware.flicks.api.model;
+
+/**
+ * Created by Thieusike on 6/15/2017.
+ */
+
+public class Youtube {
+    private String name;
+    private String size;
+    private String source;
+    private String type;
+
+    public Youtube() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+}
