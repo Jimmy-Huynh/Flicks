@@ -74,10 +74,9 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
             if (!animationStates[position]) {
-
                 animationStates[position] = true;
                 Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
-                animation.setStartOffset(position * 500);
+                animation.setStartOffset(position * 100);
                 convertView.startAnimation(animation);
             }
             viewHolder = new ViewHolder(convertView);
